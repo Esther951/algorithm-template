@@ -1,0 +1,104 @@
+struct SPFA
+{
+    struct node
+    {
+        int to;
+        ll w;
+    };
+    int n;
+    vector<vector<node>> adj;
+    vector<ll> dist;
+    vector<ll> cnt;
+    vector<bool> inq;
+
+    SPFA(int n) : n(n), adj(n + 1), cnt(n + 1), dist(n + 1), inq(n + 1) {}
+
+    void add_edge(int u, int v, ll w)
+    {
+        adj[u].push_back({v, w});
+    }
+
+    bool shortestPath(int s)
+    {
+        fill(dist.begin(), dist.end(), INF);
+        fill(cnt.begin(), cnt.end(), 0);
+        fill(inq.begin(), inq.end(), false);
+
+        queue<int> q;
+        q.push(s);
+        dist[s] = 0;
+        inq[s] = true;
+        cnt[s] = 1;
+
+        while (!q.empty())
+        {
+            int u = q.front();
+            q.pop();
+            inq[u] = false;
+
+            for (auto e : adj[u])
+            {
+                int v = e.to;
+                ll w = e.w;
+
+                if (dist[v] > dist[u] + w)
+                {
+                    dist[v] = dist[u] + w;
+                    if (!inq[v])
+                    {
+                        q.push(v);
+                        inq[v] = true;
+                        cnt[v]++;
+                        if (cnt[v] > n)
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    bool longestPath(int s)
+    {
+        fill(dist.begin(), dist.end(), -INF);
+        fill(cnt.begin(), cnt.end(), 0);
+        fill(inq.begin(), inq.end(), false);
+
+        queue<int> q;
+        q.push(s);
+        dist[s] = 0;
+        inq[s] = true;
+        cnt[s] = 1;
+
+        while (!q.empty())
+        {
+            int u = q.front();
+            q.pop();
+            inq[u] = false;
+
+            for (auto e : adj[u])
+            {
+                int v = e.to;
+                ll w = e.w;
+
+                if (dist[v] < dist[u] + w)
+                {
+                    dist[v] = dist[u] + w;
+                    if (!inq[v])
+                    {
+                        q.push(v);
+                        inq[v] = true;
+                        cnt[v]++;
+                        if (cnt[v] > n)
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+    }
+};
