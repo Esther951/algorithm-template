@@ -1,0 +1,70 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<ll, ll> PLL;
+typedef pair<int, int> PII;
+typedef tuple<int, int, int> TII;
+#define endl '\n'
+const ll N = 1e5 + 5;
+const ll INF = 1e18, MINF = -1e18;
+ll prime[] = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47};
+
+vector<ll> hcn;
+ll ans = 1;
+ll max_cnt = 0;
+void dfs(ll idx, ll max_exp, ll cur, ll cnt, ll limit)
+{
+
+    if (cnt > max_cnt || (cnt == max_cnt && cur < ans))
+    {
+        ans = cur;
+        max_cnt = cnt;
+    }
+
+    for (int exp = 1; exp <= max_exp; exp++)
+    {
+        cur *= prime[idx];
+        if (cur > limit)
+        {
+            break;
+        }
+
+        dfs(idx + 1, exp, cur, cnt * (exp + 1), limit);
+    }
+}
+void solve()
+{
+
+    ll n;
+    cin >> n;
+    ll max_exp = 0, tc = 1;
+    for (int i = 1; i <= n; i++)
+    {
+        if (tc * 2 > n)
+        {
+            break;
+        }
+        else
+        {
+            max_exp++;
+            tc *= 2;
+        }
+    }
+    dfs(0, max_exp, 1, 1, n);
+    cout << ans << endl;
+}
+
+int main()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+
+    ll t = 1;
+    // cin >> t;
+    while (t--)
+    {
+        solve();
+    }
+
+    return 0;
+}
