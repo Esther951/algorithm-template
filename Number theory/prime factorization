@@ -1,0 +1,38 @@
+const int MAXP = 31623; //1e9上限
+vector<int> primes;
+bool vis[MAXP + 5];
+void sieve()
+{
+    for (int i = 2; i <= MAXP; i++)
+    {
+        if (!vis[i])
+        {
+            primes.push_back(i);
+            for (int j = i * i; j <= MAXP; j += i)
+            {
+                vis[j] = true;
+            }
+        }
+    }
+}
+ll omega(ll x)
+{
+    ll res = 0;
+    for (int p : primes)
+    {
+        if ((ll)p * p > x)
+        {
+            break;
+        }
+        while (x % p == 0)
+        {
+            res++;
+            x /= p;
+        }
+    }
+    if (x > 1)
+    {
+        res++;
+    }
+    return res;
+}
